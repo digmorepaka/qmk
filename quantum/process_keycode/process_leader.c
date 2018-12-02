@@ -14,7 +14,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef LEADER_ENABLE
+
 #include "process_leader.h"
+
+#ifndef LEADER_TIMEOUT
+  #define LEADER_TIMEOUT 300
+#endif
 
 __attribute__ ((weak))
 void leader_start(void) {}
@@ -52,3 +58,5 @@ bool process_leader(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+#endif
