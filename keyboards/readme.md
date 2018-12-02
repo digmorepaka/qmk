@@ -55,3 +55,4 @@ These keyboards are part of the QMK repository, but their manufacturers are not 
 * [TheVan 44](/keyboards/tv44) &mdash; A 44-key staggered keybard by Evangs.
 * [WhiteFox](/keyboards/whitefox) &mdash; A 65% keyboard designed as a partnership by matt3o, Massdrop and Input Club
 * [Vision Division](/keyboards/vision_division) &mdash; Full Size / Split Linear Keyboard by IBNobody.
+* [YaMseK](/keyboards/yamsek) &mdash; Yet-another-Modular-split-ergonomic-keyboard, ~40% keyboard halfway between the Dactyl-keyboard and an Ergodox
