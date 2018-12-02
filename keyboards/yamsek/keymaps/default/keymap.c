@@ -110,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS    ,KC_TRNS    ,KC_KP_7    ,KC_KP_8    ,KC_KP_9    ,KC_TRNS,
         KC_TRNS    ,KC_TRNS    ,KC_KP_4    ,KC_KP_5    ,KC_KP_6    ,KC_TRNS,
         KC_TRNS    ,KC_TRNS    ,KC_KP_1    ,KC_KP_2    ,KC_KP_3    ,KC_KP_COMMA,
-        KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS
+        KC_LOCK    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS
         ),//       |           |           |           |           |
     [3] = KEYMAP(//| Mouse     |           |           |           |
         //right
@@ -122,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS    ,KC_WH_U    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_TRNS,
         KC_TRNS    ,KC_WH_D    ,KC_MS_L    ,KC_MS_UP   ,KC_MS_R    ,KC_TRNS,
         KC_TRNS    ,KC_TRNS    ,KC_TRNS    ,KC_MS_DOWN ,KC_TRNS    ,KC_TRNS,
-        KC_TRNS    ,KC_LGUI    ,KC_TRNS    ,KC_MS_BTN1 ,KC_MS_BTN2 ,KC_BTN3
+        KC_LOCK    ,KC_LGUI    ,KC_TRNS    ,KC_MS_BTN1 ,KC_MS_BTN2 ,KC_BTN3
         ),
     [4] = KEYMAP( /* RGBLIGHT */
         //right

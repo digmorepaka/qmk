@@ -1,6 +1,6 @@
 #include "yamsek.h"
 
-#include "analog.h"
+//#include "analog.h"
 
 // from mousekey.c
 #include "host.h"
@@ -36,17 +36,19 @@
 // milliseconds between mouse-events
 #define MOUSE_DELAY 20
 
+/*
 //static report_mouse_t mouse_report = {};
 static int16_t vertCenter = 512;
 static int16_t horzCenter = 512;
 #define DEADZONE 10
+*/
 
 void matrix_init_kb(void) {
     matrix_init_user();
 
     // calibrate joystick center once during startup
-    vertCenter = analogRead(5);
-    horzCenter = analogRead(4);
+//    vertCenter = analogRead(5);
+//    horzCenter = analogRead(4);
 }
 
 
@@ -61,8 +63,8 @@ void matrix_scan_kb(void) {
 
     // analog joystick mouse_task - analog to mousekey->mousekey_task
     // AVR ADC gives us 10 bit, so analogRead range should be [0,1024]
-    int16_t vert = analogRead(5);
-    int16_t horz = analogRead(4);
+//    int16_t vert = analogRead(5);
+//    int16_t horz = analogRead(4);
     // teensy pin-mapping: 5 = ADC5 = PF5
 
 #if 1

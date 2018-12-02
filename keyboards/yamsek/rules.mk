@@ -6,7 +6,7 @@ SRC = twimaster.c \
 #   that was inherited from the I2C/MCP23018 code of the ergodox/ez
 CUSTOM_MATRIX    ?= yes
 
-SRC += $(QUANTUM_DIR)/analog.c
+#SRC += $(QUANTUM_DIR)/analog.c
 
 # MCU name
 MCU = atmega32u4
@@ -75,22 +75,7 @@ UNICODE_ENABLE ?= no         # Unicode
 BLUETOOTH_ENABLE ?= no       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE ?= no           # Audio output on port C6
 FAUXCLICKY_ENABLE ?= no      # Use buzzer to emulate clicky switches
+KEY_LOCK_ENABLE = yes
 
 
 CC_FLAGS += -Werror
-
-
-#USB=/dev/ttyACM2
-avrdude: build
-	ls /dev/tty* > /tmp/1; \
-	echo "Reset your Arduino Micro now"; \
-	while [ -z $$USB ]; do \
-	  sleep 1; \
-	  ls /dev/tty* > /tmp/2; \
-	  USB=`diff /tmp/1 /tmp/2 | grep -o '/dev/tty.*'`; \
-	done; \
-	avrdude -p $(MCU) -c avr109 -P $$USB -U flash:w:$(BUILD_DIR)/$(TARGET).hex
-
-.PHONY: avrdude
-
-## NOTE: a new arduino-micro or a-star micro has to be flashed manually with the qmk firmware for the first time, otherwise the "lets see which tty vanishes" loop doesn't work :-P
