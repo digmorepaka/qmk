@@ -187,7 +187,6 @@
  * PWM driver system settings.
  */
 #define STM32_PWM_USE_ADVANCED FALSE
-/* PWMD1 used by quantum/audio/audio_arm_pwm.c */
 #define STM32_PWM_USE_TIM1 TRUE
 #define STM32_PWM_USE_TIM2 FALSE
 #define STM32_PWM_USE_TIM3 TRUE
