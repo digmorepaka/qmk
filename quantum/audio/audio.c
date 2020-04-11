@@ -376,19 +376,6 @@ float audio_get_processed_frequency(uint8_t tone_index) {
 bool audio_advance_state(uint32_t step, float end) {
     bool goto_next_note = false;
 
-    if (playing_note) {
-#ifdef AUDIO_ENABLE_TONE_MULTIPLEXING
-        tone_multiplexing_index_shift =
-            (int)(timer_read() / tone_multiplexing_rate)
-            % MIN(AUDIO_MAX_SIMULTANEOUS_TONES, active_tones);
-        goto_next_note = true;
-#endif
-        if (vibrato || glissando) {
-            // force update on each cycle, since vibrato shifts the frequency slightly
-            goto_next_note = true;
-        }
-    }
-
     if (playing_melody) {
         note_position += step;
 
@@ -442,8 +429,17 @@ bool audio_advance_state(uint32_t step, float end) {
         }
     }
 
-    if (!playing_note && !playing_melody) {
-        audio_stop_all();
+    if (playing_note) {
+#ifdef AUDIO_ENABLE_TONE_MULTIPLEXING
+        tone_multiplexing_index_shift =
+            (int)(current_time / tone_multiplexing_rate)
+            % MIN(AUDIO_MAX_SIMULTANEOUS_TONES, active_tones);
+        goto_next_note = true;
+#endif
+        if (vibrato || glissando) {
+            // force update on each cycle, since vibrato shifts the frequency slightly
+            goto_next_note = true;
+        }
     }
 
     // state-changes have a higher priority, always triggering the hardware to update
