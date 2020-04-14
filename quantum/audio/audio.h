@@ -49,6 +49,18 @@ typedef union {
 #    define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
+/*
+ * a 'musical note' is represented by pitch and duration; a 'musical tone' adds intensity and timbre
+ * https://en.wikipedia.org/wiki/Musical_tone
+ * "A musical tone is characterized by its duration, pitch, intensity (or loudness), and timbre (or quality)"
+ */
+typedef struct {
+    float pitch;     // aka frequency
+    float duration;  // in 64parts to a beats, -1 indicates an indefinitly played note
+    //float intensity; // aka volume [0,1] TODO: not used at the moment; pwm drivers can't handle it
+    //float timbre;    // range: [0,1] TODO: this currently kept track of globally, should we do this per tone instead?
+} musical_tone_t;
+
 //     ____        __    ___
 //    / __ \__  __/ /_  / (_)____
 //   / /_/ / / / / __ \/ / / ___/
@@ -80,35 +92,54 @@ void audio_off(void);
  */
 bool audio_is_on(void);
 
+
+/**
+ * @bried start playback of a tone with the given frequency and duration
+ *
+ * @details starts the playback of a given note, wich is automatically stopped
+ *          at the the end of its duration = fire&forget
+ *
+ * @param[in] pitch frequency of the tone be played
+ * @param[in] duration in milliseconds, use 'audio_duration_to_ms' to convert
+ *                     from the musical_notes.h unit to ms
+ */
+void audio_play_note(float pitch, float duration);
+// TODO: audio_play_note(float pitch, float duration, float intensity, float timbre);
+// audio_play_note_with_instrument ifdef AUDIO_ENABLE_VOICES
+
 /**
  * @bried start playback of a tone with the given frequency
- * @details the 'frequency' is appended to an internal stack of active tones,
+ *
+ * @details the 'frequency' is put ontop the internal stack of active tones,
  *          as a new tone with indefinite duration. this tone is played by
  *          the hardware until a call to 'audio_stop_tone'.
  *          should a tone with that frequency already be active, its entry
  *          is put on the top of said internal stack - so no duplicate
  *          entries are kept.
  *          'hardware_start' is called upon the first note.
- * @param[in] frequency frequency of the tone be played
+ *
+ * @param[in] pitch frequency of the tone be played
  */
-void audio_play_tone(float frequency);
-// TODO: add audio_play_note(float pitch, float duration, float intensity, float timbre);
-// audio_play_note_with_instrument ifdef AUDIO_ENABLE_VOICES
-// audio_play_pulses(frequency, count, delay/initialpause) - for fauxclicky, have pwm output exactly $count pulses
+void audio_play_tone(float pitch);
 
 /**
  * @brief stop a given tone/frequency
- * @details removes the given frequency from the 'frequencies' array, stopping
- *          its playback, and the hardware in case this was the last/only frequency
+ *
+ * @details removes a tone matching the given frequency from the internal
+ *          playback stack
+ *          the hardware is stopped in case this was the last/only frequency
  *          beeing played.
- * @param[in] freq   tone/frequenct to be stopped
+ *
+ * @param[in] pitch tone/frequenct to be stopped
  */
-void audio_stop_tone(float frequency);
+void audio_stop_tone(float pitch);
 
 /**
  * @brief play a melody
+ *
  * @details starts playback of a melody passed in from a SONG definition - an
- *          array of {frequency, duration} float-tuples
+ *          array of {pitch, duration} float-tuples
+ *
  * @param[in] np note-pointer to the SONG array
  * @param[in] n_count number of MUSICAL_NOTES of the SONG
  * @param[in] n_repeat false for onetime, true for looped playback
@@ -123,13 +154,14 @@ void audio_play_melody(float (*np)[][2], uint16_t n_count, bool n_repeat);
  *          hardware limitations (DAC: added pulses from zero-crossing feature;...)
  *
  * @param[in] delay in milliseconds, lenght for the pause before the pulses, can be zero
- * @param[in] frequency
+ * @param[in] pitch
  * @param[in] duration in milliseconds, length of the 'click'
  */
-void audio_play_click(uint16_t delay, float frequency, uint16_t duration);
+void audio_play_click(uint16_t delay, float pitch, uint16_t duration);
 
 /**
  * @brief stops all playback
+ *
  * @details stops playback of both a meldoy as well as single tones, resetting
  *          the internal state
  */
