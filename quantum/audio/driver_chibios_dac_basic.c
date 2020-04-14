@@ -137,7 +137,7 @@ float channel_2_get_frequency(void) { return channel_2_frequency; }
 #endif  // AUDIO_PIN(_ALT)_A5
 
 static void gpt_cb8(GPTDriver *gptp) {
-    if (audio_advance_state(1, gpt8cfg1.frequency)) {
+    if (audio_update_state()) {
 #if (defined (AUDIO_PIN_A4) && defined(AUDIO_PIN_A5)) || (defined(AUDIO_PIN_A4) && defined(AUDIO_PIN_ALT_AS_NEGATIVE) && defined(AUDIO_PIN_ALT_A5)) || (defined(AUDIO_PIN_A5) && defined(AUDIO_PIN_ALT_AS_NEGATIVE) && defined(AUDIO_PIN_ALT_A4))
         // one piezo/speaker connected to both audio pins, the generated squarewaves are inverted
         channel_1_set_frequency(audio_get_processed_frequency(0));

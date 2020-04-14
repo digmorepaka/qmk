@@ -55,6 +55,7 @@ typedef union {
  * "A musical tone is characterized by its duration, pitch, intensity (or loudness), and timbre (or quality)"
  */
 typedef struct {
+    uint32_t time_started; // timestamp the tone/note was started, systemtime runs with 1ms resolution -> 16bit timer overflows every ~64 seconds, long enough under normal circumstances; but might be too soon for long-duration notes when the note_tempo is set to a very low value
     float pitch;     // aka frequency
     float duration;  // in 64parts to a beats, -1 indicates an indefinitly played note
     //float intensity; // aka volume [0,1] TODO: not used at the moment; pwm drivers can't handle it
@@ -214,6 +215,10 @@ void audio_set_tempo(uint8_t tempo);
 void audio_increase_tempo(uint8_t tempo_change);
 void audio_decrease_tempo(uint8_t tempo_change);
 
+// conversion macros, from 64parts-to-a-beat to milliseconds and back
+#define audio_duration_to_ms(d) (d / 64 * (60 / note_tempo) * 1000)
+#define audio_ms_to_duration(t) (t * 64 * (note_tempo / 60) / 1000)
+
 //     __  __               __
 //    / / / /___ __________/ /      ______ __________
 //   / /_/ / __ `/ ___/ __  / | /| / / __ `/ ___/ _  /
@@ -259,22 +264,14 @@ float audio_get_processed_frequency(uint8_t tone_index);
 /**
  * @brief   update audio internal state: currently playing and active tones,...
  * @details This function is intended to be called by the audio-hardware
- *          specific implementation on a regular basis while a SONG is
- *          playing, to 'advance' the position/time/internal state
+ *          specific implementation on a somewhat regular basis while a SONG
+ *          or notes (pitch+duration) are playing to 'advance' the internal
+ *          state (current playing notes, position in the melody, ...)
  *
- * @note: 'step' and 'end' can be used if the function is to be called from a
- *        timer/ISR with irregular period - say a pwm-isr - then one could use
- *        'step=1' with 'end' set to the current pwm-frequency; and still have
- *        a somewhat regular state progression
- *
- * @param[in] step arbitrary step value, audio.c keeps track of for the
- *            audio-driver
- * @param[in] end scaling factor multiplied to the note_length. has to match
- *            step so that audio.c can determine when a tone has finished playing
- * @return true if the melody advanced to its next tone, which the driver might
- *         need/choose to react to
+ * @return true if something changed in the currently active tones, which the
+ *         hardware might need to react to
  */
-bool audio_advance_state(uint32_t step, float end);
+bool audio_update_state(void);
 
 //     __
 //    / /   ___  ____ _____ ________  __
