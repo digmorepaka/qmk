@@ -1,0 +1,18 @@
+#define MATRIX_ROWS 8
+#define MATRIX_COLS 16
+
+#define MATRIX_ROW_PINS {A1, A0, B11, B10, B1, B0, A7, B7}
+#define MATRIX_COL_PINS {B12, B13, B14, B15, A8, A9, A10, A11, A12, A15, A6, B3, A5, B4, A4, B5}
+
+#define DIODE_DIRECTION COL2ROW
+
+#define VENDOR_ID	0xFEED
+#define PRODUCT_ID	0x6465
+#define DEVICE_VER	0x0001
+#define MANUFACTURER 	QMK
+#define PRODUCT		keyboard
+#define DESCRIPTION	7 row
+
+
+#define PS2_CLOCK B8
+#define PS2_DATA  B9
